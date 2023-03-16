@@ -17,13 +17,13 @@ __all__ = [
     "create_default_biosphere3",
     "create_default_lcia_methods",
     "CSVImporter",
-    'CSVLCIAImporter',
+    "CSVLCIAImporter",
     "DatabaseSelectionToGEXF",
     "DatabaseToGEXF",
     "Ecospold1LCIAImporter",
     "es2_activity_hash",
     "ExcelImporter",
-    'ExcelLCIAImporter',
+    "ExcelLCIAImporter",
     "get_csv_example_filepath",
     "get_xlsx_example_filepath",
     "lci_matrices_to_excel",
@@ -90,7 +90,10 @@ from .utils import activity_hash, es2_activity_hash, load_json_data_file
 from bw2data import config, databases
 
 config.metadata.extend(
-    [migrations, unlinked_data,]
+    [
+        migrations,
+        unlinked_data,
+    ]
 )
 
 
@@ -102,7 +105,9 @@ def create_default_biosphere3(overwrite=False):
     eb.write_database(overwrite=overwrite)
 
 
-def create_default_lcia_methods(overwrite=False, rationalize_method_names=False, shortcut=True):
+def create_default_lcia_methods(
+    overwrite=False, rationalize_method_names=False, shortcut=True
+):
     if shortcut:
         import zipfile
         import json
@@ -115,9 +120,9 @@ def create_default_lcia_methods(overwrite=False, rationalize_method_names=False,
             data = json.load(archive.open("data.json"))
 
         for method in data:
-            method['name'] = tuple(method['name'])
-            for obj in method['exchanges']:
-                obj['input'] = tuple(obj['input'])
+            method["name"] = tuple(method["name"])
+            for obj in method["exchanges"]:
+                obj["input"] = tuple(obj["input"])
 
         ei = LCIAImporter("lcia_39_ecoinvent.zip")
         ei.data = data

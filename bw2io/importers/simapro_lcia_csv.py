@@ -11,7 +11,7 @@ from time import time
 
 
 class SimaProLCIACSVImporter(LCIAImporter):
-    format = u"SimaPro CSV LCIA"
+    format = "SimaPro CSV LCIA"
 
     def __init__(
         self,
@@ -32,7 +32,7 @@ class SimaProLCIACSVImporter(LCIAImporter):
         start = time()
         self.data = SimaProLCIACSVExtractor.extract(filepath, delimiter, encoding)
         print(
-            u"Extracted {} methods in {:.2f} seconds".format(
+            "Extracted {} methods in {:.2f} seconds".format(
                 len(self.data), time() - start
             )
         )

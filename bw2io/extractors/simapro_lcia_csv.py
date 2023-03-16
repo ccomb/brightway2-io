@@ -6,7 +6,7 @@ import csv
 import os
 
 
-INTRODUCTION = u"""Starting SimaPro import:
+INTRODUCTION = """Starting SimaPro import:
 \tFilepath: %s
 \tDelimiter: %s
 """
@@ -34,9 +34,15 @@ class SimaProLCIACSVExtractor(object):
     @classmethod
     def extract(cls, filepath, delimiter=";", encoding="cp1252"):
         assert os.path.exists(filepath), "Can't find file %s" % filepath
-        log, logfile = get_io_logger(u"SimaPro-LCIA-extractor")
+        log, logfile = get_io_logger("SimaPro-LCIA-extractor")
 
-        log.info(INTRODUCTION % (filepath, repr(delimiter),))
+        log.info(
+            INTRODUCTION
+            % (
+                filepath,
+                repr(delimiter),
+            )
+        )
 
         with open(filepath, "r", encoding=encoding) as csv_file:
             reader = csv.reader(csv_file, delimiter=delimiter)
@@ -46,7 +52,7 @@ class SimaProLCIACSVExtractor(object):
             ]
 
         # Check if valid SimaPro file
-        assert u"SimaPro" in lines[0][0], "File is not valid SimaPro export"
+        assert "SimaPro" in lines[0][0], "File is not valid SimaPro export"
 
         datasets = []
 
@@ -69,7 +75,7 @@ class SimaProLCIACSVExtractor(object):
             try:
                 if data[index] and data[index][0] in SKIPPABLE_SECTIONS:
                     index = cls.skip_to_section_end(data, index)
-                elif data[index] and data[index][0] == u"Method":
+                elif data[index] and data[index][0] == "Method":
                     return index + 1
             except IndexError:
                 # File ends without extra metadata
@@ -92,15 +98,17 @@ class SimaProLCIACSVExtractor(object):
         3. CAS number
         4. CF
         5. unit
+        6. input
 
         """
         categories = (line[0], line[1])
         return {
-            u"amount": float(line[4]),
-            u"CAS number": line[3],
-            u"categories": categories,
-            u"name": line[2],
-            u"unit": line[5],
+            "amount": float(line[4]),
+            "CAS number": line[3],
+            "categories": categories,
+            "name": line[2],
+            "unit": line[5],
+            "input": (biosphere, line[6]),
         }
 
     @classmethod
