@@ -30,7 +30,9 @@ class SimaProLCIACSVImporter(LCIAImporter):
                 normalize_simapro_biosphere_names,
             ] + self.strategies[1:]
         start = time()
-        self.data = SimaProLCIACSVExtractor.extract(filepath, delimiter, encoding)
+        self.data = SimaProLCIACSVExtractor.extract(
+            filepath, biosphere, delimiter, encoding
+        )
         print(
             "Extracted {} methods in {:.2f} seconds".format(
                 len(self.data), time() - start
