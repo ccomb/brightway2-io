@@ -139,7 +139,9 @@ class SimaProLCIACSVExtractor(object):
                 catdata, index = cls.get_damage_category_data(data, index + 1)
                 damage_category_data.append(catdata)
             else:
-                raise ValueError
+                raise ValueError(
+                    f"Unknown method data block at line {index+1}: {data[index][0]}"
+                )
 
         for ds in category_data:
             completed_data.append(
