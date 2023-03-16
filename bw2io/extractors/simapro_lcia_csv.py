@@ -181,7 +181,7 @@ class SimaProLCIACSVExtractor(object):
     @classmethod
     def get_all_cfs(cls, nw_data, category_data):
         def rescale(cf, scale):
-            cf["amount"] *= scale
+            cf["amount"] *= scale[0]  # apply weighting
             return cf
 
         cfs = []
@@ -249,15 +249,33 @@ class SimaProLCIACSVExtractor(object):
     @classmethod
     def get_normalization_weighting_data(cls, data, index):
         # TODO: Only works for weighting data, no addition or normalization
-        nw_data = []
+        nw_data = dict()
         name = data[index][0]
         index += 2
-        assert data[index][0] == "Weighting"
-        index += 1
-        while data[index]:
-            cat, weight = data[index][:2]
-            index += 1
-            if weight == "0":
+        while not data[index] or data[index][0] != "End":
+            if not data[index] or not data[index][0]:
+                index += 1
+
+            if data[index][0] == "Weighting":
+                index += 1
+                while data[index]:
+                    cat, weight = data[index][:2]
+                    index += 1
+                    if weight == "0":
+                        continue
+                    nw_data[cat] = (float(weight), nw_data.get(cat, (None, None))[1])
+            elif data[index][0] == "Normalization":
+                index += 1
+                while data[index]:
+                    cat, normalization = data[index][:2]
+                    index += 1
+                    if normalization == "0":
+                        continue
+                    nw_data[cat] = (
+                        nw_data.get(cat, (None, None))[0],
+                        float(normalization),
+                    )
+            else:
                 continue
-            nw_data.append((cat, float(weight)))
-        return (name, nw_data), index
+
+        return (name, list(nw_data.items())), index
