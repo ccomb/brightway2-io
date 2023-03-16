@@ -222,8 +222,8 @@ class SimaProLCIACSVExtractor(object):
                                 existing_cf["amount"] += cf["amount"] * scale
                                 found_cf = True
                                 continue
-                    if found_cf:
-                        continue
+                        if found_cf:
+                            continue
                     cfs.extend([rescale(cf, scale) for cf in cf_data])
         return cfs
 
