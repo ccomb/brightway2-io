@@ -1,8 +1,10 @@
 from setuptools import setup
 
 REQUIREMENTS = [
+    "asteval>=0.9.30",
     "bw2calc>=1.7.4",
     "bw2data>=3.5.1",
+    "bw2parameters",
     "bw_migrations",
     "lxml",
     "mrio_common_metadata",
