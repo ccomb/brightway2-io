@@ -49,7 +49,7 @@ class EndOfDatasets(Exception):
     pass
 
 
-def to_number(obj):
+def to_number(obj, show_errors=True):
     try:
         return float(obj.replace(",", ".").strip())
     except (ValueError, SyntaxError):
@@ -59,7 +59,8 @@ def to_number(obj):
         try:
             # Eval for simple expressions like "1/2"
             number = Interpreter().eval(
-                obj.replace(",", ".").replace("^", "**").strip()
+                obj.replace(",", ".").replace("^", "**").strip(),
+                show_errors=show_errors
             )
             if isinstance(number, (int, float)):
                 return float(number)
@@ -336,7 +337,7 @@ class SimaProCSVExtractor(object):
 
         """
         unit, amount = line[2], line[3]
-        if isinstance(to_number(line[2]), Number):
+        if isinstance(to_number(line[2], show_errors=False), Number):
             unit, amount = amount, unit
 
         is_formula = not isinstance(to_number(amount), Number)
@@ -372,7 +373,7 @@ class SimaProCSVExtractor(object):
 
         """
         unit, amount = line[1], line[2]
-        if isinstance(to_number(line[1]), Number):
+        if isinstance(to_number(line[1], show_errors=False), Number):
             unit, amount = amount, unit
 
         is_formula = not isinstance(to_number(amount), Number)
@@ -410,7 +411,7 @@ class SimaProCSVExtractor(object):
 
         """
         unit, amount = line[2], line[3]
-        if isinstance(to_number(line[2]), Number):
+        if isinstance(to_number(line[2], show_errors=False), Number):
             unit, amount = amount, unit
 
         is_formula = not isinstance(to_number(amount), Number)
@@ -447,7 +448,7 @@ class SimaProCSVExtractor(object):
 
         """
         unit, amount = line[1], line[2]
-        if isinstance(to_number(line[1]), Number):
+        if isinstance(to_number(line[1], show_errors=False), Number):
             unit, amount = amount, unit
 
         is_formula = not isinstance(to_number(amount), Number)
