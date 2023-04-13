@@ -243,7 +243,7 @@ Returns:
                 else:
                     seen.add(o["code"])
             error = "The following activities have non-unique codes: {}"
-            raise NonuniqueCode(error.format(duplicates))
+            raise NonuniqueCode(error.format(list(set(duplicates))))
 
         data = {(ds["database"], ds["code"]): ds for ds in data}
 
