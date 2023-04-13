@@ -239,7 +239,7 @@ Returns:
             seen, duplicates = set(), []
             for o in data:
                 if o["code"] in seen:
-                    duplicates.append(o["name"])
+                    duplicates.append(o.get("name", o["code"]))
                 else:
                     seen.add(o["code"])
             error = "The following activities have non-unique codes: {}"
