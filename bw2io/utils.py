@@ -80,7 +80,6 @@ def standardize_method_to_len_3(name, padding="--", joiner=","):
 
 
 class ExchangeLinker:
-    re_sub = re.compile(r"[()\[\],'\"]")
 
     field_funcs = {"default": lambda act, field: act.get(field, "")}
 
@@ -89,7 +88,6 @@ class ExchangeLinker:
             field_value,
             case_insensitive=True,
             strip=True,
-            re_sub=re_sub,
     ):
         if field_value is None:
             return None
@@ -99,8 +97,6 @@ class ExchangeLinker:
                 value = value.lower()
             if strip:
                 value = value.strip()
-            if re_sub is not None:
-                value = re_sub.sub("", value)
             return value
 
     @staticmethod
