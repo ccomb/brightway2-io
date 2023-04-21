@@ -51,11 +51,11 @@ def sp_allocate_products(db):
                 if product["allocation"]:
                     allocation = product["allocation"]
                     if type(product["allocation"]) is str and "parameters" in ds:
-                        interp = bw2parameters.DefaultParameterSet(
+                        interp = bw2parameters.ParameterSet(
                             ds["parameters"]
                         ).get_interpreter()
                         interp.add_symbols(
-                            bw2parameters.DefaultParameterSet(
+                            bw2parameters.ParameterSet(
                                 ds["parameters"]
                             ).evaluate_and_set_amount_field()
                         )
@@ -108,7 +108,8 @@ def fix_zero_allocation_products(db):
 def link_technosphere_based_on_name_unit_location(db, external_db_name=None):
     """Link technosphere exchanges based on name, unit, and location. Can't use categories because we can't reliably extract categories from SimaPro exports, only exchanges.
 
-    If ``external_db_name``, link against a different database; otherwise link internally."""
+    If ``external_db_name``, link against a different database; otherwise link internally.
+    """
     return link_technosphere_by_activity_hash(
         db, external_db_name=external_db_name, fields=("name", "location", "unit")
     )
@@ -194,7 +195,8 @@ def change_electricity_unit_mj_to_kwh(db):
 def fix_localized_water_flows(db):
     """Change ``Water, BR`` to ``Water``.
 
-    Biosphere flows can't have locations - locations are defined by the activity dataset."""
+    Biosphere flows can't have locations - locations are defined by the activity dataset.
+    """
     locations = (
         set(get_valid_geonames())
         .union(set(GEO_UPDATE.keys()))
