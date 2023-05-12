@@ -32,7 +32,7 @@ strip_delete = lambda obj: obj.replace("\x7f", "") if isinstance(obj, str) else 
 
 class SimaProLCIACSVExtractor(object):
     @classmethod
-    def extract(cls, filepath, biosphere, delimiter=";", encoding="cp1252"):
+    def extract(cls, filepath, delimiter=";", encoding="cp1252"):
         assert os.path.exists(filepath), "Can't find file %s" % filepath
         log, logfile = get_io_logger("SimaPro-LCIA-extractor")
 
@@ -60,7 +60,7 @@ class SimaProLCIACSVExtractor(object):
 
         while True:
             try:
-                ds, index = cls.read_method_data_set(biosphere, lines, index, filepath)
+                ds, index = cls.read_method_data_set(lines, index, filepath)
                 datasets.extend(ds)
                 index = cls.get_next_method_index(lines, index)
             except EndOfDatasets:
@@ -89,7 +89,7 @@ class SimaProLCIACSVExtractor(object):
         return index
 
     @classmethod
-    def parse_cf(cls, biosphere, line):
+    def parse_cf(cls, line):
         """Parse line in `Substances` section.
 
         0. category
@@ -98,17 +98,15 @@ class SimaProLCIACSVExtractor(object):
         3. CAS number
         4. CF
         5. unit
-        6. input
 
         """
         categories = (line[0], line[1])
         return {
-            "amount": float(line[4]),
-            "CAS number": line[3],
-            "categories": categories,
-            "name": line[2],
-            "unit": line[5],
-            "input": (biosphere, line[6]),
+            u"amount": float(line[4]),
+            u"CAS number": line[3],
+            u"categories": categories,
+            u"name": line[2],
+            u"unit": line[5],
         }
 
     @classmethod
@@ -125,7 +123,7 @@ class SimaProLCIACSVExtractor(object):
             index += 1
 
     @classmethod
-    def read_method_data_set(cls, biosphere, data, index, filepath):
+    def read_method_data_set(cls, data, index, filepath):
         metadata, index = cls.read_metadata(data, index)
         method_root_name = metadata.pop("Name")
         description = metadata.pop("Comment")
@@ -136,7 +134,7 @@ class SimaProLCIACSVExtractor(object):
             if not data[index] or not data[index][0]:
                 index += 1
             elif data[index][0] == "Impact category":
-                catdata, index = cls.get_category_data(biosphere, data, index + 1)
+                catdata, index = cls.get_category_data(data, index + 1)
                 category_data.append(catdata)
             elif data[index][0] == "Normalization-Weighting set":
                 nw_dataset, index = cls.get_normalization_weighting_data(
@@ -228,7 +226,7 @@ class SimaProLCIACSVExtractor(object):
         return cfs
 
     @classmethod
-    def get_category_data(cls, biosphere, data, index):
+    def get_category_data(cls, data, index):
         cf_data = []
         # First line is name and unit
         name, unit = data[index][:2]
@@ -236,7 +234,7 @@ class SimaProLCIACSVExtractor(object):
         assert data[index][0] == "Substances"
         index += 1
         while data[index]:
-            cf_data.append(cls.parse_cf(biosphere, data[index]))
+            cf_data.append(cls.parse_cf(data[index]))
             index += 1
         return (name, unit, cf_data), index
 
