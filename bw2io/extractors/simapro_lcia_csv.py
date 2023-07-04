@@ -102,11 +102,11 @@ class SimaProLCIACSVExtractor(object):
         """
         categories = (line[0], line[1])
         return {
-            u"amount": float(line[4]),
-            u"CAS number": line[3],
-            u"categories": categories,
-            u"name": line[2],
-            u"unit": line[5],
+            "amount": float(line[4].replace(",", ".")),
+            "CAS number": line[3],
+            "categories": categories,
+            "name": line[2],
+            "unit": line[5],
         }
 
     @classmethod
@@ -248,7 +248,7 @@ class SimaProLCIACSVExtractor(object):
         index += 1
         while data[index]:
             method, scalar = data[index][:2]
-            damage_data.append((method, float(scalar)))
+            damage_data.append((method, float(scalar.replace(",", "."))))
             index += 1
         return (name, unit, damage_data), index
 
@@ -269,7 +269,10 @@ class SimaProLCIACSVExtractor(object):
                     index += 1
                     if weight == "0":
                         continue
-                    nw_data[cat] = (float(weight), nw_data.get(cat, (None, None))[1])
+                    nw_data[cat] = (
+                        float(weight.replace(",", ".")),
+                        nw_data.get(cat, (None, None))[1],
+                    )
             elif data[index][0] == "Normalization":
                 index += 1
                 while data[index]:
@@ -279,7 +282,7 @@ class SimaProLCIACSVExtractor(object):
                         continue
                     nw_data[cat] = (
                         nw_data.get(cat, (None, None))[0],
-                        float(normalization),
+                        float(normalization.replace(",", ".")),
                     )
             else:
                 continue
