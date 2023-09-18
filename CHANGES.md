@@ -1,5 +1,16 @@
 # `bw2io` Changelog
 
+### 0.9.DEV23 (2023-09-17)
+
+* Use bw2data for cache filepath
+* Bunch of small issue fixes
+* [#207 Fixed float parsing errors](https://github.com/brightway-lca/brightway2-io/pull/207)
+* [#213 Reparametrize lognormals for ecospold2 imports](https://github.com/brightway-lca/brightway2-io/pull/213)
+
+### 0.9.DEV22 (2023-09-15)
+
+* Pinned dependencies to fix environment problems
+
 ### 0.9.DEV21 (2023-08-12)
 
 * #138: Fixed import of SimaPro process with multiple literature refs

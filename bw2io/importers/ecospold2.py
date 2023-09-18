@@ -1,4 +1,5 @@
 from functools import partial
+from pathlib import Path
 from time import time
 
 from bw2data import Database, config
@@ -25,6 +26,7 @@ from ..strategies import (
     remove_unnamed_parameters,
     remove_zero_amount_coproducts,
     remove_zero_amount_inputs_with_no_activity,
+    reparametrize_lognormal_to_agree_with_static_amount,
     set_lognormal_loc_value,
     update_ecoinvent_locations,
     update_social_flows_in_older_consequential,
@@ -53,6 +55,7 @@ class SingleOutputEcospold2Importer(LCIImporter):
         extractor=Ecospold2DataExtractor,
         use_mp=True,
         signal=None,
+        reparametrize_lognormals=False,
     ):
 
         """
@@ -70,9 +73,17 @@ class SingleOutputEcospold2Importer(LCIImporter):
             Flag to indicate whether to use multiprocessing, by default True.
         signal : object
             Object to indicate the status of the import process, by default None.
+        reparametrize_lognormals: bool
+            Flag to indicate if lognormal distributions for exchanges should be reparametrized
+            such that the mean value of the resulting distribution meets the amount
+            defined for the exchange.
         """
         
         self.dirpath = dirpath
+
+        if not Path(dirpath).is_dir():
+            raise ValueError(f"`dirpath` value was not a directory: {dirpath}")
+
         self.db_name = db_name
         self.signal = signal
         self.strategies = [
@@ -93,12 +104,16 @@ class SingleOutputEcospold2Importer(LCIImporter):
             delete_ghost_exchanges,
             remove_uncertainty_from_negative_loss_exchanges,
             fix_unreasonably_high_lognormal_uncertainties,
-            set_lognormal_loc_value,
             convert_activity_parameters_to_list,
             add_cpc_classification_from_single_reference_product,
             delete_none_synonyms,
             partial(update_social_flows_in_older_consequential, biosphere_db=Database(config.biosphere)),
         ]
+
+        if reparametrize_lognormals:
+            self.strategies.append(reparametrize_lognormal_to_agree_with_static_amount)
+        else:
+            self.strategies.append(set_lognormal_loc_value)
 
         start = time()
         try:
