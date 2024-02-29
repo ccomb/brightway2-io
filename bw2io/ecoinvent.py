@@ -6,13 +6,11 @@ from typing import Any
 
 import bw2data as bd
 import ecoinvent_interface as ei
-import openpyxl
 from ecoinvent_interface.core import SYSTEM_MODELS
 from ecoinvent_interface.string_distance import damerau_levenshtein
 
 from .extractors import ExcelExtractor
 from .importers import (
-    EcoinventLCIAImporter,
     Ecospold2BiosphereImporter,
     SingleOutputEcospold2Importer,
 )
@@ -250,6 +248,10 @@ def import_ecoinvent_release(
         soup.write_database()
 
     if lcia:
+        subversion = int(version.split(".")[1])
+        if subversion < 4:
+            raise ValueError("LCIA import for versions 3.0-3.3 not supported")
+
         if biosphere_name is None:
             biosphere_name = bd.config.biosphere
         if biosphere_name not in bd.databases or not len(bd.Database(biosphere_name)):
