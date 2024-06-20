@@ -257,27 +257,27 @@ class SimaProLCIACSVExtractor(object):
                 }
             )
 
-        for ds in nw_data:
-            completed_data.append(
-                {
-                    "description": description,
-                    "name": (method_root_name, ds[0]),
-                    "unit": metadata["Weighting unit"],
-                    "filename": filepath,
-                    "exchanges": cls.get_all_cfs(ds[1], category_data),
-                }
-            )
+        #for ds in nw_data:
+        #    completed_data.append(
+        #        {
+        #            "description": description,
+        #            "name": (method_root_name, ds[0]),
+        #            "unit": metadata["Weighting unit"],
+        #            "filename": filepath,
+        #            "exchanges": cls.get_all_cfs(ds[1], category_data),
+        #        }
+        #    )
 
-        for ds in damage_category_data:
-            completed_data.append(
-                {
-                    "description": description,
-                    "name": (method_root_name, ds[0]),
-                    "unit": ds[1],
-                    "filename": filepath,
-                    "exchanges": cls.get_damage_exchanges(ds[2], category_data),
-                }
-            )
+        #for ds in damage_category_data:
+        #    completed_data.append(
+        #        {
+        #            "description": description,
+        #            "name": (method_root_name, ds[0]),
+        #            "unit": ds[1],
+        #            "filename": filepath,
+        #            "exchanges": cls.get_damage_exchanges(ds[2], category_data),
+        #        }
+        #    )
 
         return completed_data, index
 
@@ -416,6 +416,15 @@ class SimaProLCIACSVExtractor(object):
         nw_data = []
         name = data[index][0]
         index += 2
+        assert data[index][0] == "Normalization"
+        index += 1
+        while data[index]:
+            cat, norm = data[index][:2]
+            index += 1
+            if norm == "0":
+                continue
+            nw_data.append((cat, float(norm.replace(",", "."))))
+        index += 1
         assert data[index][0] == "Weighting"
         index += 1
         while data[index]:
