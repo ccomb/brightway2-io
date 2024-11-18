@@ -3,10 +3,11 @@ import math
 import os
 import re
 import uuid
+from numbers import Number
+
 from bw2data.logs import close_log, get_io_logger
 from bw2parameters import ParameterSet
 from bw2parameters.errors import MissingName
-from numbers import Number
 from stats_arrays import (
     LognormalUncertainty,
     NormalUncertainty,
@@ -695,9 +696,11 @@ class SimaProCSVExtractor(object):
         ds.update(
             {
                 "name": line[0],
-                "categories": ("Final waste flows", line[1])
-                if line[1]
-                else ("Final waste flows",),
+                "categories": (
+                    ("Final waste flows", line[1])
+                    if line[1]
+                    else ("Final waste flows",)
+                ),
                 "unit": unit,
                 "comment": "; ".join([x for x in line[8:] if x]),
                 "type": "technosphere",

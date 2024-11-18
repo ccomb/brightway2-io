@@ -1,5 +1,75 @@
 # `bw2io` Changelog
 
+### 0.9.DEV41 (2024-10-15)
+
+* Also convert `market group for electricity` to `kWh`
+
+### 0.9.DEV40 (2024-10-14)
+
+* Add `split_simapro_name_geo_curly_brackets` strategy
+* Add `remove_biosphere_location_prefix_if_flow_in_same_location` strategy
+
+### 0.9.DEV39 (2024-10-13)
+
+* Add `create_products_as_new_nodes` strategy
+* Add additional configuration options for `randonneur`
+* Update tests for recent `bw2data` changes
+* Updates for vocab.sentier.dev units URL change
+
+### 0.9.DEV38 (2024-09-12)
+
+* Fix #274: correctly set units for namespaced methods when importing ecoinvent with ecoinvent_interface
+
+### 0.9.DEV37 (2024-09-04)
+
+* Fix out of order but with `create_randonneur_excel_template_for_unlinked`
+
+### 0.9.DEV36 (2024-09-04)
+
+* Add `create_randonneur_excel_template_for_unlinked`
+
+### 0.9.DEV35 (2024-09-02)
+
+* Add method to directly apply `randonneur` transformations
+* Add `create_new_database_for_flows_with_missing_top_level_context` method
+* Add `normalize_simapro_labels_to_brightway_standard` method
+* Add `match_against_top_level_context` function
+* Add `match_against_only_available_in_given_context_tree` method
+* Add `create_regionalized_biosphere_proxies` method
+* Allow `add_extra_attributes`
+
+### 0.9.DEV34 (2024-08-21)
+
+* Restore Py 3.9 compatibility
+
+### 0.9.DEV33 (2024-08-15)
+
+* Packaging fix
+
+### 0.9.DEV32 (2024-08-15)
+
+* Add `SimaProUnitConverter` which uses `https://vocab.sentier.dev/` for unit conversion and harmonization
+* Improved robustness of `rescale_exchange`
+* Fixed bug with SimaPro name-location strings with spaces inside
+
+### 0.9.DEV31 (2024-08-14)
+
+* Improved statistics reporting for importers
+
+### 0.9.DEV30 (2024-07-23)
+
+* Change default to namespace LCIA methods in ecoinvent imports
+
+### 0.9.DEV29 (2024-07-09)
+
+* Restore Python 3.9 compatibility
+* Compatibility with SimaPro multifunctionality via `bw_simapro_csv` and `multifunctional`.
+
+### 0.9.DEV28 (2024-06-21)
+
+* Allow imports of some invalid ecospold1 files
+* Fix fetching of remote data catalogues in `remote`
+
 ### 0.9.DEV27 (2024-05-07)
 
 * [#256 Change to new packaging template](https://github.com/brightway-lca/brightway2-io/pull/256)
